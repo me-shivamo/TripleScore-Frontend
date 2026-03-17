@@ -6,6 +6,7 @@ import { SendHorizonal, Square } from "lucide-react";
 import { NovaAvatar } from "./NovaAvatar";
 import { cn } from "@/lib/utils";
 import type { Message } from "@/hooks/useNovaChat";
+import ReactMarkdown from "react-markdown";
 
 interface OnboardingChatProps {
   messages: Message[];
@@ -29,9 +30,11 @@ export function OnboardingChat({
 
   const lastUserMessage = [...messages]
     .reverse()
-    .find((m) => m.role === "user");
+    .find((m) => m.role === "user" && m.content !== "__NOVA_INIT__");
 
-  const currentStep = messages.filter((m) => m.role === "user").length;
+  const currentStep = messages.filter(
+    (m) => m.role === "user" && m.content !== "__NOVA_INIT__"
+  ).length;
 
   // Welcome state: no messages yet, or first assistant message still empty/streaming
   const isWelcome =
@@ -103,17 +106,28 @@ export function OnboardingChat({
               key={lastNovaMessage?.id}
               className="animate-fade-in"
             >
-              <p className="text-2xl font-medium text-foreground leading-relaxed tracking-tight">
-                {lastNovaMessage?.isStreaming && !lastNovaMessage?.content ? (
-                  <span className="flex items-center justify-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0s" }} />
-                    <span className="w-2 h-2 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0.2s" }} />
-                    <span className="w-2 h-2 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0.4s" }} />
-                  </span>
-                ) : (
-                  lastNovaMessage?.content
-                )}
-              </p>
+              {lastNovaMessage?.isStreaming && !lastNovaMessage?.content ? (
+                <span className="flex items-center justify-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0s" }} />
+                  <span className="w-2 h-2 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0.2s" }} />
+                  <span className="w-2 h-2 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0.4s" }} />
+                </span>
+              ) : (
+                <div className="text-2xl font-medium text-foreground leading-relaxed tracking-tight text-center">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                      strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>,
+                      ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1 text-left">{children}</ul>,
+                      ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1 text-left">{children}</ol>,
+                      li: ({ children }) => <li>{children}</li>,
+                    }}
+                  >
+                    {lastNovaMessage?.content ?? ""}
+                  </ReactMarkdown>
+                </div>
+              )}
             </div>
 
             {/* Progress dots */}
