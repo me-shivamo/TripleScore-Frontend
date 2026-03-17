@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChatWindow } from "@/components/nova/ChatWindow";
+import { OnboardingChat } from "@/components/nova/OnboardingChat";
 import { useNovaChat } from "@/hooks/useNovaChat";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -50,22 +51,25 @@ export default function ChatPage() {
     }
   };
 
+  if (mode === "ONBOARDING") {
+    return (
+      <OnboardingChat
+        messages={messages}
+        isLoading={isLoading}
+        onSend={handleSend}
+        onStop={stopStreaming}
+      />
+    );
+  }
+
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col">
       {/* Header */}
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
         <div>
           <h1 className="text-sm font-semibold text-foreground">Nova</h1>
-          <p className="text-xs text-muted-foreground">
-            {onboardingCompleted ? "Your study companion" : "Setting up your study plan"}
-          </p>
+          <p className="text-xs text-muted-foreground">Your study companion</p>
         </div>
-        {!onboardingCompleted && (
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-xs text-muted-foreground">Onboarding</span>
-          </div>
-        )}
       </div>
 
       <ChatWindow

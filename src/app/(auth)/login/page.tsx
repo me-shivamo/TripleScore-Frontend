@@ -8,6 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -66,23 +67,63 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center pl-16 pr-6 py-16">
-      <div className="flex flex-col items-start gap-12 max-w-2xl">
+    <div className="min-h-screen bg-white flex flex-row items-stretch overflow-hidden relative">
+      {/* Background blob — decorative upper-right */}
+      <div className="absolute top-[-100px] right-[-100px] w-[600px] h-[600px] rounded-full bg-blue-50 blur-3xl opacity-60 pointer-events-none z-0" />
+
+      {/* LEFT COLUMN */}
+      <div className="flex flex-col justify-center pl-12 sm:pl-16 pr-8 py-16 w-full lg:w-[55%] relative z-10 gap-6">
+        {/* Wordmark */}
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg gradient-blue flex items-center justify-center">
+            <span className="text-white text-xs font-bold">T</span>
+          </div>
+          <span className="text-sm font-semibold tracking-wide text-foreground">TripleScore</span>
+        </div>
+
+        {/* Badge */}
+        <Badge variant="default" className="text-[10px] uppercase tracking-widest px-3 py-1 w-fit">
+          AI-Powered JEE Prep
+        </Badge>
+
         {/* Headline */}
         <h1
           style={{ fontFamily: "'Projekt Blackbird', sans-serif" }}
-          className="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight tracking-tight text-black text-left"
+          className="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight tracking-tight text-black text-left animate-fade-in"
         >
           Most Students Study.{" "}
           <span className="block">Few Learn to Perform.</span>
           <span className="block">Be the Few.</span>
         </h1>
 
+        {/* Subheadline */}
+        <p className="text-base text-muted-foreground max-w-sm leading-relaxed">
+          Your AI tutor, adaptive practice, and performance analytics — built for JEE aspirants.
+        </p>
+
+        {/* Stat pills */}
+        <div className="flex flex-wrap gap-3">
+          <div className="glass classic-shadow rounded-full px-4 py-2 flex items-center gap-2">
+            <span className="text-amber-500 text-sm">★</span>
+            <span className="text-xs font-medium text-foreground">XP-based learning</span>
+          </div>
+          <div className="glass classic-shadow rounded-full px-4 py-2 flex items-center gap-2">
+            <span className="text-emerald-500 text-sm">↑</span>
+            <span className="text-xs font-medium text-foreground">Score tracking</span>
+          </div>
+          <div className="glass classic-shadow rounded-full px-4 py-2 flex items-center gap-2">
+            <span className="text-blue-500 text-sm">⚡</span>
+            <span className="text-xs font-medium text-foreground">Daily missions</span>
+          </div>
+        </div>
+
         {/* Google Sign-in Button */}
         <Button
+          variant="gradient"
+          size="lg"
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="px-8 py-3 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="rounded-full animate-pulse-glow w-fit"
         >
           {loading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -110,6 +151,53 @@ export default function LoginPage() {
             </>
           )}
         </Button>
+
+        {/* Trust copy */}
+        <p className="text-[11px] text-muted-foreground">Free to start · No credit card required</p>
+      </div>
+
+      {/* RIGHT COLUMN — desktop only */}
+      <div className="hidden lg:flex lg:w-[45%] relative items-center justify-center">
+        {/* Soft background glow */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[500px] h-[500px] rounded-full gradient-blue opacity-[0.06] blur-[80px]" />
+        </div>
+
+        {/* Card 1 — Readiness Score */}
+        <div className="glass classic-shadow-md rounded-2xl p-5 w-64 absolute top-[20%] right-[15%] rotate-2 animate-fade-in-delay-1">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Readiness Score</p>
+          <p className="text-4xl font-bold text-foreground">
+            74<span className="text-lg text-muted-foreground">/100</span>
+          </p>
+          <div className="mt-3 h-1.5 rounded-full bg-secondary overflow-hidden">
+            <div className="h-full rounded-full gradient-blue w-[74%]" />
+          </div>
+          <p className="text-[11px] text-muted-foreground mt-2">Physics needs attention</p>
+        </div>
+
+        {/* Card 2 — Streak */}
+        <div className="glass classic-shadow-md rounded-2xl p-4 w-48 absolute top-[42%] right-[30%] -rotate-1 animate-fade-in-delay-2">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🔥</span>
+            <div>
+              <p className="text-lg font-bold text-foreground">12 days</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Current streak</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3 — XP */}
+        <div className="glass classic-shadow rounded-2xl p-3 w-40 absolute top-[60%] right-[18%] rotate-1 animate-fade-in-delay-3">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center">
+              <span className="text-amber-600 text-xs font-bold">XP</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">+340 today</p>
+              <p className="text-[10px] text-muted-foreground">Keep going!</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

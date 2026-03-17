@@ -63,6 +63,9 @@
 }
 
 @layer utilities {
+  .animate-fade-in-delay-1 { animation: fade-in 0.35s ease-out 0.1s both; }
+  .animate-fade-in-delay-2 { animation: fade-in 0.35s ease-out 0.25s both; }
+  .animate-fade-in-delay-3 { animation: fade-in 0.35s ease-out 0.4s both; }
   .text-balance {
     text-wrap: balance;
   }
