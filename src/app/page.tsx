@@ -22,7 +22,7 @@ export default function Home() {
       .then((r) => r.json())
       .then((data) => {
         if (data.onboarding_completed) {
-          router.replace("/dashboard");
+          router.replace("/practice");
         } else {
           router.replace("/chat");
         }
