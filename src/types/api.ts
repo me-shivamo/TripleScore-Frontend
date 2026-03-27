@@ -126,3 +126,41 @@ export interface SubmitResult {
   session_id: string;
   xp_result: Record<string, unknown>;
 }
+
+// ─── Practice ────────────────────────────────────────────────────────────────
+
+export interface PracticeQuestion {
+  id: string;
+  subject: string;
+  chapter: string;
+  topic: string;
+  content: string;
+  question_type: "MCQ" | "INTEGER";
+  options: QuestionOption[];
+  correct_option: string;
+  explanation: string;
+  difficulty: "EASY" | "MEDIUM" | "HARD";
+  image_url: string | null;
+}
+
+export interface PracticeQuestionsResponse {
+  questions: PracticeQuestion[];
+}
+
+export interface ChaptersResponse {
+  chapters: string[];
+}
+
+export interface PracticeAttempt {
+  question_id: string;
+  selected_option: string | null;
+  time_taken_secs: number;
+}
+
+export interface PracticeSubmitResponse {
+  session_id: string;
+  correct: number;
+  total: number;
+  accuracy: number;
+  xp_earned: number;
+}

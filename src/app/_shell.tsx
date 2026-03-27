@@ -8,11 +8,7 @@ import { MobileNav } from "@/components/layout/MobileNav";
 import { useAuth } from "@/hooks/useAuth";
 import { getOnboardingStatus } from "@/services/nova";
 
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Shell({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
@@ -24,7 +20,6 @@ export default function AppLayout({
     }
   }, [user, loading, router]);
 
-  // Fetch onboarding status from backend once user is authenticated
   useEffect(() => {
     if (!user) return;
     getOnboardingStatus()
@@ -32,11 +27,14 @@ export default function AppLayout({
       .catch(() => setOnboardingCompleted(false));
   }, [user]);
 
-  const isOnboarding =
-    (pathname === "/chat" && onboardingCompleted === false) ||
-    pathname === "/diagnostic";
+  // No shell on public/onboarding routes
+  const isShellless =
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname === "/diagnostic" ||
+    (pathname === "/chat" && onboardingCompleted === false);
 
-  if (isOnboarding || loading || onboardingCompleted === null) {
+  if (isShellless || loading || onboardingCompleted === null) {
     return <>{children}</>;
   }
 
